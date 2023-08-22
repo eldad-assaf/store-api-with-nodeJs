@@ -3,12 +3,15 @@ const Product =require('../models/product')
 
 
 const getAllProductsStatic = async (req, res) => {
-    throw new Error('Testing async errors')
-//  res.status(200).json({ msg: "products testing route" });
+  const products = await Product.find({ price: 25 })
+  res.status(200).json({products , nbHits: products.length})
+  console.log(products)
 };
 
 const getAllProducts = async (req, res) => {
-  res.status(200).json({ msg: "products route" });
+  console.log(req.query);
+  const products = await Product.find( req.query)
+  res.status(200).json({ products,  nbHits: products.length });
 };
 
 const createProduct = async (req, res) => {
