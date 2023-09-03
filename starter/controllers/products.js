@@ -1,7 +1,9 @@
 const Product = require("../models/product");
 
 const getAllProductsStatic = async (req, res) => {
-  const products = await Product.find({}).select("name price").limit(10);
+  const products = await Product.find({ price: { $gt: 30 } })
+    .select("name price")
+    .limit(10);
   res.status(200).json({ products, nbHits: products.length });
   console.log(products);
 };
@@ -9,7 +11,7 @@ const getAllProductsStatic = async (req, res) => {
 const getAllProducts = async (req, res) => {
   //console.log(req.query);
   //**trys to deconstruct the 'featured', 'company' ... parms from the query  */
-  const { featured, company, name, sort, fields } = req.query;
+  const { featured, company, name, sort, fields, numericFilters } = req.query;
 
   const queryObject = {};
   //**If 'featured' exists then set the right value in the 'queryObject' */
@@ -24,7 +26,35 @@ const getAllProducts = async (req, res) => {
     queryObject.name = { $regex: name, $options: "i" };
   }
 
-  console.log(queryObject);
+  if (numericFilters) {
+    // console.log(numericFilters)
+
+    const operatorMap = {
+      ">": "$gt",
+      ">=": "$gte",
+      "=": "$eq",
+      "<": "$lt",
+      "<=": "$lte",
+    };
+
+    const regEx = /\b(<|>|>=|=|<|<=)\b/g;
+    let filters = numericFilters.replace(
+      regEx,
+      (match) => `-${operatorMap[match]}-`
+    );
+
+    const options = ["price", "rating"];
+    filters = filters.split(',').forEach((item) => {
+      const [field, operator, value] = item.split("-");
+      if (options.includes(field)) {
+        queryObject[field] = { [operator]: Number(value) };
+      }
+    });
+
+    console.log(queryObject);
+  }
+
+  //console.log(queryObject);
   let result = Product.find(queryObject);
   if (sort) {
     console.log(sort);
@@ -44,6 +74,9 @@ const getAllProducts = async (req, res) => {
   const skip = (page - 1) * limit;
 
   result = result.skip(skip).limit(limit);
+
+  //23 products
+  //if limit is 7 products per page then : 4 pages (7,7,7,2)
 
   const products = await result;
   //const products = await Product.find(queryObject);
