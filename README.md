@@ -53,7 +53,7 @@ To run this Node.js backend service locally, follow these steps:
 
 2. **Navigate to the Project Directory:**
    ```bash
-   cd your-nodejs-service
+   cd store-api-with-nodeJs
    ```
 
 3. **Install Dependencies:**
@@ -74,6 +74,3 @@ The service will start and be accessible at the specified port (default is 3000)
 
 Thank you for exploring this Node.js backend service. I hope you find it insightful and informative, showcasing my technical skills in Node.js development.
 
----
-
-In this README, the focus is on the technical aspects of your Node.js backend service, including the project structure, how to run it locally, and how to contribute. Customize it with your specific project details and repository link.
