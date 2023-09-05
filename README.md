@@ -48,7 +48,7 @@ To run this Node.js backend service locally, follow these steps:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/eldad-assaf/04-store-api.git
+   git clone https://github.com/eldad-assaf/store-api-with-nodeJs.git
    ```
 
 2. **Navigate to the Project Directory:**
